@@ -18,7 +18,17 @@ const getExpenses = async (req, res) => {
     }
 };
 
+const updateExpense = async (req, res) => {
+    try {
+        const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        res.json(expense);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createExpense,
-    getExpenses
+    getExpenses, 
+    updateExpense
 };
