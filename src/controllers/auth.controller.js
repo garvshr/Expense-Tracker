@@ -1,6 +1,8 @@
 import userModel from "../models/user.model.js";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
+
 
 
 
@@ -32,9 +34,10 @@ export async function register(req,res){
     const token =jwt.sign({
         id:user._id
     },config.JWT_SECRET,
-    {
-        expiresIn : "1d"
-    })
+        {
+            expiresIn : "1d"
+        }
+    )
 
     res.status(201).json({
         message:"User register successfully",
