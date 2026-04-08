@@ -1,9 +1,9 @@
-const Expense = require('../models/expense');
+const Expense = require('../models/expense.model');
 
 const createExpense = async (req, res) => {
     try {
         const expense = await Expense.create(req.body);
-        res.status(201).json(expense);
+        res.status(201).json({ message: 'Expense created successfully', expense });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -18,10 +18,29 @@ const getExpenses = async (req, res) => {
     }
 };
 
+exports.getExpenseById = async (req, res) => {
+    try {
+        const expense = await Expense.findById(req.params.id);
+        if (!expense) return res.status(404).json({ message: "Not found" });
+        res.json(expense);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const updateExpense = async (req, res) => {
     try {
         const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, {new: true});
-        res.json(expense);
+        res.status(200).json({ message: 'Expense updated successfully', expense });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const deleteExpense = async (req, res) => {
+    try {
+        await Expense.findByIdAndDelete(req.params.id);
+        res.json({ message: "Deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -30,5 +49,7 @@ const updateExpense = async (req, res) => {
 module.exports = {
     createExpense,
     getExpenses, 
-    updateExpense
+    getExpenseById,
+    updateExpense,
+    deleteExpense
 };
