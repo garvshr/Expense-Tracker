@@ -18,7 +18,7 @@ const getExpenses = async (req, res) => {
     }
 };
 
-exports.getExpenseById = async (req, res) => {
+const getExpenseById = async (req, res) => {
     try {
         const expense = await Expense.findById(req.params.id);
         if (!expense) return res.status(404).json({ message: "Not found" });
