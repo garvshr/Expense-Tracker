@@ -1,5 +1,5 @@
 const express = require('express');
-const expenseRoutes = require('./routes/expenseRoutes');
+const expenseRoutes = require('./routes/expense.routes');
 
 const app = express();
 
