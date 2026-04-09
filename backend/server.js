@@ -4,6 +4,7 @@ const connectDB = require('./src/config/db');
 
 dotenv.config();
 
+app.use(errorHandler);
 // Connect DB
 connectDB();
 
