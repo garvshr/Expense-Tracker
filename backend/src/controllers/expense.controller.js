@@ -5,7 +5,7 @@ const createExpense = async (req, res) => {
         const expense = await Expense.create(req.body);
         res.status(201).json({ message: 'Expense created successfully', expense });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
 };
 

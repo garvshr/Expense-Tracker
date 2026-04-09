@@ -9,10 +9,12 @@ const {
     deleteExpense
 } = require('../controllers/expense.controller');
 
-router.post('/', createExpense);
+const { validateExpense } = require('../middleware/validate.middleware');
+
+router.post('/', validateExpense, createExpense);
 router.get('/', getExpenses);
 router.get('/:id', getExpenseById);
-router.put('/:id', updateExpense);
+router.put('/:id', validateExpense, updateExpense);
 router.delete('/:id', deleteExpense);
 
 module.exports = router;
