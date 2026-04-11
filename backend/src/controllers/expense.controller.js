@@ -1,55 +1,107 @@
-const Expense = require('../models/expense.model');
+const expenseService = require('../services/expense.service');
 
-const createExpense = async (req, res) => {
+// CREATE
+const createExpense = async (req, res, next) => {
     try {
-        const expense = await Expense.create(req.body);
+        const expense = await expenseService.createExpense(req.body);
         res.status(201).json({ message: 'Expense created successfully', expense });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+    } catch (err) {
+        next(err);
     }
 };
 
-const getExpenses = async (req, res) => {
+// GET ALL (with pagination/filter)
+const getExpenses = async (req, res, next) => {
     try {
-        const expenses = await Expense.find().sort({ date: -1 });
-        res.json(expenses);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        const data = await expenseService.getExpenses(req.query);
+        res.json(data);
+    } catch (err) {
+        next(err);
     }
 };
 
-const getExpenseById = async (req, res) => {
+// GET BY ID
+const getExpenseById = async (req, res, next) => {
     try {
-        const expense = await Expense.findById(req.params.id);
-        if (!expense) return res.status(404).json({ message: "Not found" });
+        const expense = await expenseService.getExpenseById(req.params.id);
+
+        if (!expense) {
+            return res.status(404).json({ message: "Expense not found" });
+        }
+
         res.json(expense);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    } catch (err) {
+        next(err);
     }
 };
 
-const updateExpense = async (req, res) => {
+// UPDATE
+const updateExpense = async (req, res, next) => {
     try {
-        const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, {new: true});
-        res.status(200).json({ message: 'Expense updated successfully', expense });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        const expense = await expenseService.updateExpense(req.params.id, req.body);
+
+        if (!expense) {
+            return res.status(404).json({ message: "Expense not found" });
+        }
+
+        res.json({ message: 'Updated successfully', expense });
+    } catch (err) {
+        next(err);
     }
 };
 
-const deleteExpense = async (req, res) => {
+// DELETE
+const deleteExpense = async (req, res, next) => {
     try {
-        await Expense.findByIdAndDelete(req.params.id);
+        const expense = await expenseService.deleteExpense(req.params.id);
+
+        if (!expense) {
+            return res.status(404).json({ message: "Expense not found" });
+        }
+
         res.json({ message: "Deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    } catch (err) {
+        next(err);
+    }
+};
+
+// TOTAL
+const getTotalExpenses = async (req, res, next) => {
+    try {
+        const total = await expenseService.getTotalExpenses();
+        res.json({ total });
+    } catch (err) {
+        next(err);
+    }
+};
+
+// CATEGORY SUMMARY
+const getCategorySummary = async (req, res, next) => {
+    try {
+        const data = await expenseService.categorySummary();
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+// MONTHLY SUMMARY
+const getMonthlySummary = async (req, res, next) => {
+    try {
+        const data = await expenseService.monthlySummary();
+        res.json(data);
+    } catch (err) {
+        next(err);
     }
 };
 
 module.exports = {
     createExpense,
-    getExpenses, 
+    getExpenses,
     getExpenseById,
     updateExpense,
-    deleteExpense
+    deleteExpense,
+    getTotalExpenses,
+    getCategorySummary,
+    getMonthlySummary
 };

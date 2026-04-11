@@ -5,16 +5,29 @@ const {
     createExpense,
     getExpenses, 
     getExpenseById,
+    getTotalExpenses,
     updateExpense,
-    deleteExpense
+    deleteExpense,
+    getCategorySummary,
+    getMonthlySummary
 } = require('../controllers/expense.controller');
 
-const { validateExpense } = require('../middleware/validate.middleware');
+const { validateExpense, validateExpenseUpdate } = require('../middleware/validate.middleware');
 
+// Create
 router.post('/', validateExpense, createExpense);
+
+// Read
+router.get('/total', getTotalExpenses); 
+router.get('/summary/category', getCategorySummary);
+router.get('/summary/monthly', getMonthlySummary);
 router.get('/', getExpenses);
 router.get('/:id', getExpenseById);
-router.put('/:id', validateExpense, updateExpense);
+
+// Update
+router.put('/:id', validateExpenseUpdate, updateExpense);
+
+// Delete
 router.delete('/:id', deleteExpense);
 
 module.exports = router;
