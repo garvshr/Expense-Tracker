@@ -11,3 +11,7 @@ app.use(express.json());
 app.use('/api/expenses', expenseRoutes);
 
 module.exports = app;
+
+
+const { errorHandler } = require('./middleware/error.middleware');
+app.use(errorHandler);
