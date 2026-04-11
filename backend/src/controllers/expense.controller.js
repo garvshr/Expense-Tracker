@@ -46,10 +46,22 @@ const deleteExpense = async (req, res) => {
     }
 };
 
+const getTotalExpenses = async (req, res) => {
+    try {
+        const total = await Expense.aggregate([
+            { $group: { _id: null, totalAmount: { $sum: "$amount" } } }
+        ]);
+        res.json({ total: total[0]?.totalAmount || 0 });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createExpense,
     getExpenses, 
     getExpenseById,
     updateExpense,
-    deleteExpense
+    deleteExpense,
+    getTotalExpenses
 };

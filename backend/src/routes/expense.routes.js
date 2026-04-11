@@ -5,6 +5,7 @@ const {
     createExpense,
     getExpenses, 
     getExpenseById,
+    getTotalExpenses,
     updateExpense,
     deleteExpense
 } = require('../controllers/expense.controller');
@@ -14,6 +15,7 @@ const { validateExpense } = require('../middleware/validate.middleware');
 router.post('/', validateExpense, createExpense);
 router.get('/', getExpenses);
 router.get('/:id', getExpenseById);
+router.get('/total', getTotalExpenses);
 router.put('/:id', validateExpense, updateExpense);
 router.delete('/:id', deleteExpense);
 
