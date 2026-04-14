@@ -11,7 +11,7 @@ const validateExpense = (req, res, next) => {
         return res.status(400).json({ error: "Amount must be a number greater than 0" });
     }
 
-    const allowedCategories = ['Food', 'Travel', 'Shopping', 'Bills', 'Other'];
+    const allowedCategories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Healthcare', 'Education', 'Housing', 'Health', 'Other'];
 
     if (!category || !allowedCategories.includes(category)) {
         return res.status(400).json({ error: "Invalid or missing category" });
@@ -39,7 +39,7 @@ const validateExpenseUpdate = (req, res, next) => {
         req.body.amount = amount;
     }
 
-    const allowedCategories = ['Food', 'Travel', 'Shopping', 'Bills', 'Other'];
+    const allowedCategories = ['Food', 'Transport', 'Shopping', 'Bills', 'Entertainment', 'Healthcare', 'Education', 'Housing', 'Health', 'Other'];
     if (category !== undefined) {
         if (!allowedCategories.includes(category)) {
             return res.status(400).json({ error: "Invalid category" });
