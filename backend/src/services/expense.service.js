@@ -1,7 +1,7 @@
 const Expense = require('../models/expense.model');
 
 exports.getExpenses = async (query) => {
-    const { page = 1, limit = 10, category, min, max, sort } = query;
+    const { page = 1, limit = 100, category, min, max, sort = 'date_desc' } = query;
 
     let filter = {};
 
@@ -42,7 +42,7 @@ exports.getExpenses = async (query) => {
     let sortOption = {};
     if (sort === 'amount_asc') sortOption.amount = 1;
     if (sort === 'amount_desc') sortOption.amount = -1;
-    if (sort === 'date_desc') sortOption.createdAt = -1;
+    if (sort === 'date_desc') sortOption.date = -1;
 
     const pageNum = Number(page);
     const limitNum = Number(limit);
@@ -105,7 +105,7 @@ exports.getTotalExpenses = async () => {
 
 exports.createExpense = async (expenseData) => {
     const expense = new Expense(expenseData);
-    return await expense.save();
+    return expense.save();
 };
 
 exports.getExpenseById = async (id) => {
