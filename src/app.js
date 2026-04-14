@@ -1,15 +1,25 @@
-import express from 'express';
-import morgon from 'morgan';
-import authRouter from './routes/auth.routes.js';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const expenseRoutes = require('./routes/expense.routes');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
- 
 
+// Middlewares
+app.use(cors({
+    origin: 'http://localhost:5173', // Vite default port
+    credentials: true
+}));
 app.use(express.json());
-app.use(morgon("dev"));
 app.use(cookieParser());
 
-app.use("/api/auth",authRouter);
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/expenses', expenseRoutes);
 
-export default app;
+module.exports = app;
+
+
+const { errorHandler } = require('./middleware/error.middleware');
+app.use(errorHandler);
