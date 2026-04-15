@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/expenses', expenseRoutes);
+app.use('/auth', authRoutes);
+app.use('/expenses', expenseRoutes);
 
 module.exports = app;
 
