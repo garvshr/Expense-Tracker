@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
-const API_URL = 'http://localhost:8800/api/auth';
+const API_URL = '/api/auth';
 
 // Configure axios for credential support (cookies)
 axios.defaults.withCredentials = true;
