@@ -13,6 +13,10 @@ const {
 } = require('../controllers/expense.controller');
 
 const { validateExpense, validateExpenseUpdate } = require('../middleware/validate.middleware');
+const { protect } = require('../middleware/auth.middleware');
+
+// Apply protection to all routes below
+router.use(protect);
 
 // Create
 router.post('/', validateExpense, createExpense);

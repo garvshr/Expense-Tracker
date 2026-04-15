@@ -1,9 +1,10 @@
 const Expense = require('../models/expense.model');
+const mongoose = require('mongoose');
 
-exports.getExpenses = async (query) => {
+exports.getExpenses = async (userId, query) => {
     const { page = 1, limit = 100, category, min, max, sort = 'date_desc' } = query;
 
-    let filter = {};
+    let filter = { user: userId };
 
     if (category) {
         filter.category = category;
@@ -65,8 +66,11 @@ exports.getExpenses = async (query) => {
     };
 };
 
-exports.categorySummary = async () => {
+exports.categorySummary = async (userId) => {
     return await Expense.aggregate([
+        {
+            $match: { user: new mongoose.Types.ObjectId(userId) }
+        },
         {
             $group: {
                 _id: "$category",
@@ -76,8 +80,11 @@ exports.categorySummary = async () => {
     ]);
 };
 
-exports.monthlySummary = async () => {
+exports.monthlySummary = async (userId) => {
     return await Expense.aggregate([
+        {
+            $match: { user: new mongoose.Types.ObjectId(userId) }
+        },
         {
             $group: {
                 _id: { $month: "$createdAt" },
@@ -90,8 +97,11 @@ exports.monthlySummary = async () => {
     ]);
 };
 
-exports.getTotalExpenses = async () => {
+exports.getTotalExpenses = async (userId) => {
     const result = await Expense.aggregate([
+        {
+            $match: { user: new mongoose.Types.ObjectId(userId) }
+        },
         {
             $group: {
                 _id: null,
@@ -103,19 +113,19 @@ exports.getTotalExpenses = async () => {
     return result.length > 0 ? result[0].total : 0;
 };
 
-exports.createExpense = async (expenseData) => {
-    const expense = new Expense(expenseData);
+exports.createExpense = async (userId, expenseData) => {
+    const expense = new Expense({ ...expenseData, user: userId });
     return expense.save();
 };
 
-exports.getExpenseById = async (id) => {
-    return await Expense.findById(id);
+exports.getExpenseById = async (id, userId) => {
+    return await Expense.findOne({ _id: id, user: userId });
 };
 
-exports.updateExpense = async (id, updateData) => {
-    return await Expense.findByIdAndUpdate(id, updateData, { new: true });
+exports.updateExpense = async (id, userId, updateData) => {
+    return await Expense.findOneAndUpdate({ _id: id, user: userId }, updateData, { new: true });
 };
 
-exports.deleteExpense = async (id) => {
-    return await Expense.findByIdAndDelete(id);
+exports.deleteExpense = async (id, userId) => {
+    return await Expense.findOneAndDelete({ _id: id, user: userId });
 };

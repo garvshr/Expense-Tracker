@@ -3,7 +3,7 @@ const expenseService = require('../services/expense.service');
 // CREATE
 const createExpense = async (req, res, next) => {
     try {
-        const expense = await expenseService.createExpense(req.body);
+        const expense = await expenseService.createExpense(req.user.id, req.body);
         res.status(201).json({ message: 'Expense created successfully', expense });
     } catch (err) {
         next(err);
@@ -13,7 +13,7 @@ const createExpense = async (req, res, next) => {
 // GET ALL (with pagination/filter)
 const getExpenses = async (req, res, next) => {
     try {
-        const data = await expenseService.getExpenses(req.query);
+        const data = await expenseService.getExpenses(req.user.id, req.query);
         res.json(data);
     } catch (err) {
         next(err);
@@ -23,7 +23,7 @@ const getExpenses = async (req, res, next) => {
 // GET BY ID
 const getExpenseById = async (req, res, next) => {
     try {
-        const expense = await expenseService.getExpenseById(req.params.id);
+        const expense = await expenseService.getExpenseById(req.params.id, req.user.id);
 
         if (!expense) {
             return res.status(404).json({ message: "Expense not found" });
@@ -38,7 +38,7 @@ const getExpenseById = async (req, res, next) => {
 // UPDATE
 const updateExpense = async (req, res, next) => {
     try {
-        const expense = await expenseService.updateExpense(req.params.id, req.body);
+        const expense = await expenseService.updateExpense(req.params.id, req.user.id, req.body);
 
         if (!expense) {
             return res.status(404).json({ message: "Expense not found" });
@@ -53,7 +53,7 @@ const updateExpense = async (req, res, next) => {
 // DELETE
 const deleteExpense = async (req, res, next) => {
     try {
-        const expense = await expenseService.deleteExpense(req.params.id);
+        const expense = await expenseService.deleteExpense(req.params.id, req.user.id);
 
         if (!expense) {
             return res.status(404).json({ message: "Expense not found" });
@@ -68,7 +68,7 @@ const deleteExpense = async (req, res, next) => {
 // TOTAL
 const getTotalExpenses = async (req, res, next) => {
     try {
-        const total = await expenseService.getTotalExpenses();
+        const total = await expenseService.getTotalExpenses(req.user.id);
         res.json({ total });
     } catch (err) {
         next(err);
@@ -78,7 +78,7 @@ const getTotalExpenses = async (req, res, next) => {
 // CATEGORY SUMMARY
 const getCategorySummary = async (req, res, next) => {
     try {
-        const data = await expenseService.categorySummary();
+        const data = await expenseService.categorySummary(req.user.id);
         res.json(data);
     } catch (err) {
         next(err);
@@ -88,7 +88,7 @@ const getCategorySummary = async (req, res, next) => {
 // MONTHLY SUMMARY
 const getMonthlySummary = async (req, res, next) => {
     try {
-        const data = await expenseService.monthlySummary();
+        const data = await expenseService.monthlySummary(req.user.id);
         res.json(data);
     } catch (err) {
         next(err);
