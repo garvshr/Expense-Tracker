@@ -4,8 +4,7 @@ const connectDB = require('./src/config/db');
 
 dotenv.config();
 
-// Connect DB
-connectDB();
+// Database is now handled by middleware in app.js
 
 const PORT = process.env.PORT || 5000;
 

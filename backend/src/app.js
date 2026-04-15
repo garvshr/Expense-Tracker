@@ -14,6 +14,17 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+// Database connection middleware
+const connectDB = require('./config/db');
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        res.status(500).json({ message: 'Database connection failed', error: err.message });
+    }
+});
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/expenses', expenseRoutes);
