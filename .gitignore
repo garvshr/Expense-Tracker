@@ -1,8 +1,5 @@
-<<<<<<< feature/authentication
-node_modules/
-=======
+
 \node_modules
->>>>>>> dev
 .env
 
 \backend
